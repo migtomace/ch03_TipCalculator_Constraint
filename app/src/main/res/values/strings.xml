@@ -14,4 +14,18 @@
 
     <string name="total_amount_label">Total</string>
     <string name="total_amount">$0.00</string>
+
+
+    <string-array name="rounding_keys">
+        <item>None</item>
+        <item>tip</item>
+        <item>total</item>
+
+    </string-array>
+
+    <string-array name="round_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

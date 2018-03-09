@@ -3,9 +3,13 @@ package com.murach.tipcalculator;
 import java.text.NumberFormat;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.widget.Toast;
 
 public class TipCalculatorActivity extends Activity
         implements OnEditorActionListener, OnClickListener {
@@ -37,6 +42,16 @@ public class TipCalculatorActivity extends Activity
     //declare a constant for the taf parameter
     private static final String TAG = "TipCalculatorActivity";
 
+    //define rounding constants
+    private final int ROUND_NONE = 0;
+    private final int ROUND_TIP = 1;
+    private final int ROUND_TOTAL = 2;
+
+    //setup the preferences
+    private SharedPreferences prefs;
+    private boolean rememberTipPercent = true;
+    private int rounding =ROUND_NONE;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +73,18 @@ public class TipCalculatorActivity extends Activity
         // get SharedPreferences object
         savedValues = getSharedPreferences("SavedValues", MODE_PRIVATE);
 
+        //add a logcat trace
         Log.d(TAG, "onCreate method executed");
+
+        //add a toast
+        Toast t = Toast.makeText(this, "onCreate Method", Toast.LENGTH_SHORT);
+        t.show();
+
+        //set the default values for the prefs
+        PreferenceManager.setDefaultValues(this,R.xml.preferences, false);
+
+        //get the default shared prefs object
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -72,11 +98,19 @@ public class TipCalculatorActivity extends Activity
         super.onPause();
 
         Log.d(TAG, "onPause executed");
+
+        //create a toast
+        Toast t = Toast.makeText(this, "onPause method", Toast.LENGTH_LONG);
+        t.show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        //get preferences
+        rememberTipPercent = prefs.getBoolean("pref_forget_percent", true);
+        rounding = Integer.parseInt(prefs.getString("pref_rounding", "0"));
 
         // get the instance variables
         billAmountString = savedValues.getString("billAmountString", "");
@@ -89,6 +123,10 @@ public class TipCalculatorActivity extends Activity
         calculateAndDisplay();
 
         Log.d(TAG, "onResume executed");
+
+        //create a toast
+        Toast t = Toast.makeText(this, "onResume method", Toast.LENGTH_SHORT);
+        t.show();
     }
 
     public void calculateAndDisplay() {
@@ -103,9 +141,27 @@ public class TipCalculatorActivity extends Activity
             billAmount = Float.parseFloat(billAmountString);
         }
 
-        // calculate tip and total 
-        float tipAmount = billAmount * tipPercent;
-        float totalAmount = billAmount + tipAmount;
+        float tipAmount = 0;
+        float totalAmount = 0;
+        float tipPercentDisplay = 0;
+
+        if(rounding == ROUND_NONE){
+            tipAmount = billAmount * tipPercent;
+            totalAmount = billAmount + tipAmount;
+        } else if (rounding == ROUND_TIP){
+            tipAmount = StrictMath.round(billAmount * tipPercent);
+            totalAmount = billAmount + tipAmount;
+            tipPercentDisplay = tipAmount / billAmount;
+        } else if (rounding == ROUND_TOTAL){
+            float tipNotRounded = billAmount * tipPercent;
+            //tipPercentDisplay = tipAmount - billAmount;
+            tipAmount = tipNotRounded;
+            totalAmount = StrictMath.round(billAmount + tipNotRounded);
+        }
+
+//        // calculate tip and total
+//        float tipAmount = billAmount * tipPercent;
+//        float totalAmount = billAmount + tipAmount;
 
         // display the other results with formatting
         NumberFormat currency = NumberFormat.getCurrencyInstance();
@@ -114,6 +170,25 @@ public class TipCalculatorActivity extends Activity
 
         NumberFormat percent = NumberFormat.getPercentInstance();
         percentTextView.setText(percent.format(tipPercent));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu:
+                startActivity(new Intent(getApplicationContext(),
+                SettingsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
