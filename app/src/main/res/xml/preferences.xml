@@ -11,4 +11,11 @@
         android:entryValues="@array/round_values"
         android:key="pref_rounding"
         android:title="List preference" />
+    <EditTextPreference
+        android:id="@+id/pref_name"
+        android:defaultValue=" "
+        android:key="edit_text_preference_1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Name" />
 </PreferenceScreen>

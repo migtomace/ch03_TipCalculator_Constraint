@@ -38,8 +38,9 @@ public class TipCalculatorActivity extends Activity
     // define instance variables that should be saved
     private String billAmountString = "";
     private float tipPercent = .15f;
+    private String nameString = "";
 
-    //declare a constant for the taf parameter
+    //declare a constant for the tag parameter
     private static final String TAG = "TipCalculatorActivity";
 
     //define rounding constants
@@ -112,6 +113,9 @@ public class TipCalculatorActivity extends Activity
         rememberTipPercent = prefs.getBoolean("pref_forget_percent", true);
         rounding = Integer.parseInt(prefs.getString("pref_rounding", "0"));
 
+        //get preference for name
+        nameString = prefs.getString("edit_text_preference_1"," ");
+
         // get the instance variables
         billAmountString = savedValues.getString("billAmountString", "");
         tipPercent = savedValues.getFloat("tipPercent", 0.15f);
@@ -130,6 +134,12 @@ public class TipCalculatorActivity extends Activity
     }
 
     public void calculateAndDisplay() {
+
+        //get reference to nameTextView
+        TextView nameTextView = (TextView) findViewById(R.id.name_output);
+
+        //output the name input to the textView
+        nameTextView.setText(nameString);
 
         // get the bill amount
         billAmountString = billAmountEditText.getText().toString();
