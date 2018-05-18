@@ -152,7 +152,7 @@ public class TipCalculatorActivity extends Activity
         }
 
         float tipAmount = 0;
-        float totalAmount = 0;
+        float totalAmount = 0;*
         float tipPercentDisplay = 0;
 
         if(rounding == ROUND_NONE){
