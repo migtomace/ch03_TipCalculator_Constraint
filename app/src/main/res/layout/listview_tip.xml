@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/tipPercentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/billAmountTextView"
+        android:layout_below="@+id/billAmountTextView"
+        android:text="tip_percent2" />
+
+    <TextView
+        android:id="@+id/tipAmountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/billDateTextView"
+        android:layout_below="@+id/billDateTextView"
+        android:text="@string/bill_amount_label" />
+
+    <TextView
+        android:id="@+id/tipPercentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tipAmountLabel"
+        android:layout_below="@+id/tipAmountLabel"
+        android:paddingBottom="10dp"
+        android:text="@string/tip_percent_label" />
+
+    <TextView
+        android:id="@+id/billAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tipAmountLabel"
+        android:layout_alignBottom="@+id/tipAmountLabel"
+        android:layout_alignRight="@+id/billDateTextView"
+        android:text="40.73" />
+
+    <TextView
+        android:id="@+id/billDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="May 15 2018 7:00:00"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tipPercentTextView"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="Delete" />
+
+</RelativeLayout>
+
+
+
